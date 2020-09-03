@@ -1,0 +1,18 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Profile</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+</head>
+<body>
+		<input type="hidden" id="userName" name="userName" th:value="${userName}" /> 
+		<input type="hidden" id="emailId" name="emailId" th:value="${emailId}" /> 
+		<input type="hidden" id="mobileNo" name="mobileNo" th:value="${mobileNo}" /> 
+		<input type="hidden" id="gender" name="gender" th:value="${gender}" />
+		<input type="hidden" id="SSID" name="SSID" th:value="${SSID}" />
+		<input type="hidden" id="duration" name="duration" th:value="${duration}" />
+</body>
+</html>

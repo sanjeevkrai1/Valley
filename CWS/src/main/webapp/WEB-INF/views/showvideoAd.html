@@ -1,0 +1,299 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>CWS</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/rating.css}" rel="stylesheet"
+	type="text/css"></link>
+<link rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-theme.min.css}" />
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+
+	$(document).ready(function() {
+		$("#myVideo").bind("click", function() {
+			var vid = $(this).get(0);
+			var vide = document.getElementById("myVideo");
+			var duration = vide.duration;
+			if (vid.paused) {
+				vid.play();
+				callback(duration);//duration or 3
+			}
+		});
+	});
+
+	function callback(duration) {
+		var totalDuration = duration * 1000;
+		var seconds_left = duration;
+		var interval = setInterval(
+				function() {
+					document.getElementById('timer_div').innerHTML = --seconds_left
+							+ " Sec Left";
+					// <![CDATA[
+					if (seconds_left <= 2) {
+						document.getElementById('timer_div').innerHTML = "You are Ready to Access free min!";
+						clearInterval(interval);
+					}
+				}, 1000);
+		setTimeout(function() {
+			$('#myModal').modal('hide')
+			$("#linkModal").modal('show');
+			//document.form.submit();   
+		}, totalDuration);
+	}
+	// ]]>
+
+	//<![CDATA[
+	$(function() {
+		$(".like").click(function() {
+			var likeCount = document.getElementById("qty1").value;
+			var adId = document.getElementById("adData").value;
+			likeCount = parseInt(likeCount);
+			likeCount += 1;
+			document.getElementById('opinion').value = "like";
+			$.ajax({
+				url : "./rate?adId=" + adId + "&likeCount=" + likeCount,
+				type : "POST",
+				success : function(data) {
+					document.getElementById('qty1').value = data;
+					$('#like').off('click');
+					$('#dislike').off('click');
+				}
+			});
+
+		});
+
+		$(".dislike").click(function() {
+			var dislikeCount = document.getElementById("qty2").value;
+			var adId = document.getElementById("adData").value;
+			dislikeCount = parseInt(dislikeCount);
+			dislikeCount += 1;
+			document.getElementById('opinion').value = "dislike";
+			$.ajax({
+				url : "./rate?adId=" + adId + "&disLikeCount=" + dislikeCount,
+				type : "POST",
+				success : function(data) {
+					document.getElementById('qty2').value = data;
+					$('#like').off('click');
+					$('#dislike').off('click');
+				}
+			});
+		});
+	});
+	//]]>
+	$(function() {
+		$(".rate").click(function() {
+			$("#myModal2").modal('show');
+		});
+	});
+	function buyPack() {
+		//document.form.action = "buyPack";
+		document.form.submit();
+	}
+
+	function extraPack() {
+		document.form1.submit();
+	}
+
+	//<![CDATA[
+	function sendRate(val) {
+		var adId = document.getElementById("adData").value;
+		var rateVal = document.getElementById("rateVal").value;
+		var totalRatePoint = document.getElementById("totalRatePoint").value;
+		totalRatePoint = parseInt(totalRatePoint) + parseInt(val);
+		rateVal = parseInt(rateVal);
+		rateVal += 1;
+		document.getElementById('ratePoint').value = val;
+		$('#myModal2').modal('hide')
+		$.ajax({
+			url : "./rateCount?adId=" + adId + "&rateCount=" + rateVal
+					+ "&totalRatePoint=" + totalRatePoint,
+			type : "POST",
+			success : function(data) {
+				document.getElementById('qty3').value = data + "*";
+				document.getElementById('rateVal').value = rateVal + "ratings";
+				$('#rate').off('click');
+			}
+		});
+	}
+	//]]>
+</script>
+</head>
+<body>
+	<div id="wapper">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<input type="hidden" id="duration" name="duration"
+		th:value="${duration}" />
+
+	<div id="myModal" class="modal fade" data-backdrop="static"
+		data-keyboard="false">
+		<form name="form" action="grant" method="post">
+			<div class="modal-dialog1" th:if="${adType} == 'Video'">
+				<div class="modal-content">
+					<div class="modal-header">
+						<!-- <div id="timer_div"
+							Style="color: red; font-size: 20px; text-align: center;"></div> -->
+						<h4 class="modal-title">Policy based Video</h4>
+					</div>
+					<div class="modal-body">
+						<video id="myVideo" width="950px" height="1225px">
+							<source th:src="${imgurl}" type="video/mp4"
+								style="width: 950px; height: 1225px;" />
+						</video>
+					</div>
+					<input type="button" onclick="buyPack();" class="btn btn-default"
+						value="Buy Option" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="linkModal" class="modal fade" data-backdrop="static"
+		data-keyboard="false">
+		<form name="form1" action="grant" method="post">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div id="timer_div"
+							Style="color: red; font-size: 20px; text-align: center;"></div>
+						<h4 class="modal-title" id="myModalLabel">Click Here for
+							Access few more free minutes</h4>
+					</div>
+					<input type="hidden" id="grantTime" name="grantTime"
+						th:value="${grantTime}" /> <input type="hidden" id="adData"
+						name="adData" th:value="${adData}" /><input type="hidden" id="opinion"
+						name="opinion" /> <input type="hidden" id="ratePoint"
+						name="ratePoint" /> <input type="hidden"
+						id="userProfile" name="userProfile" th:value="${userProfile}" />
+					<input type="hidden" id="baseGrantUrl" name="baseGrantUrl"
+						th:value="${baseGrantUrl}" />
+					<div class="modal-body" style="height: 100px;">
+						<div th:if="${rating} == '0'">
+							<input type="button" onclick="extraPack();"
+								class="btn btn-default" value="Click Here" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="like" id="like"><i
+								class="fa fa-thumbs-o-up"></i><b> <img th:alt="like"
+									th:src="@{/resources/images/like.jpg}"
+									style="height: 25px; width: 25px;" />
+							</b> <input id="qty1" class="qty1" name="qty1" readonly="readonly"
+								type="text" th:value="${likeCount}" style="font-weight: bold;" />
+							</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a class="dislike"
+								id="dislike"><i class="fa fa-thumbs-o-down"></i><b> <img
+									th:alt="dislike" th:src="@{/resources/images/dislike.jpg}"
+									style="height: 25px; width: 25px;" />
+							</b><input class="qty2" id="qty2" name="qty2" readonly="readonly"
+								type="text" th:value="${disLikeCount}"
+								style="font-weight: bold;" /> </a> 
+						</div>
+
+							<div th:if="${rating} == '1'">
+							<input type="button" onclick="extraPack();"
+								class="btn btn-default" value="Click Here" /> <input
+								type="hidden" id="totalRatePoint" name="totalRatePoint"
+								th:value="${totalRatePoint}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a class="like" id="like"><i class="fa fa-thumbs-o-up"></i><input
+								id="qty3" class="qty3" name="qty3" readonly="readonly"
+								type="text" th:value="${ratePercent} +'*'"
+								style="font-weight: bold;" /></a> <a class="dislike" id="dislike"><i
+								class="fa fa-thumbs-o-up"></i> <input id="rateVal"
+								class="rateVal" name="rateVal" readonly="readonly" type="text"
+								th:value="${rateCount} +'ratings'"
+								style="font-weight: bold; width: 150px;" /> </a> <a class="rate"
+								id="rate"><i class="fa fa-thumbs-o-up"></i> <input
+								id="rate1" class="rate1" name="rate1" readonly="readonly"
+								type="text" value="Rate Now"
+								style="font-weight: bold; width: 75px;" /> </a>
+						</div>
+						<div th:if="${rating} == '2'">
+							<input type="button" onclick="extraPack();"
+								class="btn btn-default" value="Click Here" /> <input
+								type="hidden" id="totalRatePoint" name="totalRatePoint"
+								th:value="${totalRatePoint}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							<a class="like" id="like"><i
+								class="fa fa-thumbs-o-up"></i> <b> <img th:alt="like"
+									th:src="@{/resources/images/like.jpg}"
+									style="height: 25px; width: 25px;" />
+							</b> <input id="qty1" class="qty1" name="qty1" readonly="readonly"
+								type="text" th:value="${likeCount}" style="font-weight: bold;" />
+							</a> &nbsp;<a class="dislike"
+								id="dislike"><i class="fa fa-thumbs-o-down"></i><b> <img
+									th:alt="dislike" th:src="@{/resources/images/dislike.jpg}"
+									style="height: 25px; width: 25px;" /></b> <input class="qty2"
+								id="qty2" name="qty2" readonly="readonly" type="text"
+								th:value="${disLikeCount}" style="font-weight: bold;" /> </a>
+							<input
+								id="qty3" class="qty3" name="qty3" readonly="readonly"
+								type="hidden" th:value="${ratePercent} +'*'"
+								style="font-weight: bold;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a class="dislike" id="dislike"><i
+								class="fa fa-thumbs-o-up"></i> <input id="rateVal"
+								class="rateVal" name="rateVal" readonly="readonly" type="text"
+								th:value="${rateCount} +'ratings'"
+								style="font-weight: bold; width: 75px;" /> </a>&nbsp; <a class="rate"
+								id="rate"><i class="fa fa-thumbs-o-up"></i> <input
+								id="rate1" class="rate1" name="rate1" readonly="readonly"
+								type="text" value="Rate Now"
+								style="font-weight: bold; width: 75px;" /> </a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div id="myModal2" class="modal fade" data-backdrop="static"
+		data-keyboard="false">
+		<form name="fm" action="buyPack" method="post">
+			<div class="modal-dialog1" th:if="@{${adType}} == 'Video'">
+				<div class="modal-content"
+					style="width: 300px; position: relative; background-color: #fff; margin: 30px auto">
+					<div class="modal-header">
+						<div id="timer_div"
+							Style="color: red; font-size: 20px; text-align: center;"></div>
+						<h4 class="modal-title" id="myModalLabel">Rating Point</h4>
+					</div>
+					<div class="modal-body">
+						<span class="rating"> <input type="radio"
+							class="rating-input" id="rating-input-1-5" value="1"
+							name="rating-input-1" onclick="sendRate('5');" /> <label
+							for="rating-input-1-5" class="rating-star"></label> <input
+							type="radio" class="rating-input" id="rating-input-1-4"
+							name="rating-input-1" onclick="sendRate('4');" /> <label
+							for="rating-input-1-4" class="rating-star"></label> <input
+							type="radio" class="rating-input" id="rating-input-1-3"
+							name="rating-input-1" onclick="sendRate('3');" /> <label
+							for="rating-input-1-3" class="rating-star"></label> <input
+							type="radio" class="rating-input" id="rating-input-1-2"
+							name="rating-input-1" onclick="sendRate('2');" /> <label
+							for="rating-input-1-2" class="rating-star"></label> <input
+							type="radio" class="rating-input" id="rating-input-1-1"
+							name="rating-input-1" onclick="sendRate('1');" /> <label
+							for="rating-input-1-1" class="rating-star"></label>
+						</span>
+					</div>
+
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+</body>
+</html>

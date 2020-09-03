@@ -1,0 +1,161 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Register</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"
+	type="text/css"></link>
+
+<link rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-theme.min.css}" />
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$("#myModal").modal('show');
+
+						if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i
+								.test(navigator.userAgent)) {
+							document.getElementById('openAppDiv').style.display = "";
+							document.getElementById('registerDiv').style.display = "none";
+						} else {
+							$("#myModal").modal('show');
+
+						}
+					});
+
+	setTimeout(function() {
+		$('#myModal').modal('hide')
+	}, 20000);
+
+	var seconds_left = 20;
+	var interval = setInterval(
+			function() {
+				document.getElementById('timer_div').innerHTML = --seconds_left
+						+ " Sec Left";
+				// <![CDATA[
+				if (seconds_left <= 2) {
+					document.getElementById('timer_div').innerHTML = "You are Ready to Login or Register!";
+					clearInterval(interval);
+				}
+			}, 1000);
+	// ]]>
+</script>
+<script>
+	
+</script>
+</head>
+<body>
+	<div id="wapper"
+		style="background-image: url('../resources/images/background1.jpg'); background-size: 1370px 670px; background-repeat: no-repeat; width: 100%; height: 650px;">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+
+		<div id="registerDiv" class="login_content">
+			<form action="registerTpLink" method="post">
+				<div class="login_outer">
+					<div class="form">
+						<div class="form_list">
+							<ul>
+								<li>
+									<h1 style="padding-right: 20px;">CWS Register</h1>
+								</li>
+								<li><input type="text" placeholder="UserName"
+									name="userName" /></li>
+								<li><select style="width: 200px; height: 49px;"
+									name="gender" class="selectpicker">
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+								</select></li>
+								<li><input type="email" placeholder="Email" name="emailId" />
+								</li>
+								<li><input type="date" id="datepicker" name="dob" /></li>
+								<li><input type="number" placeholder="Mob Number"
+									name="mobileNumber" /></li>
+
+								<li><input type="hidden" name="macAddress"
+									th:value="${macAddress}" /> <input type="hidden"
+									name="switchIp" th:value="${switchIp}" /> <input type="hidden"
+									name="access" th:value="${access}" /></li>
+							</ul>
+							<div class='error_strings'>
+								<span th:text="${LoginErrMsg}" style="color: red;"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<a href="#"><input type="submit" value="Register"
+						class="button" /></a>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<div id="openAppDiv" class="login_content" style="display: none;">
+		<form>
+			<div class="login_outer" style="width: 330px;">
+				<div class="form">
+					<div class="form_list">
+						<ul>
+							<li>
+								<h1 style="padding-right: 20px;">Open App</h1>
+
+							</li>
+							<li><a th:href="${GrantAccessURL}"><input type="button"
+									value="Click here for Open App" class="button" /></a></li>
+							<li><a th:href="${appUrl}"><input type="button"
+									value="Click here for Download App" class="button" /></a></li>
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</form>
+		<div class="clear"></div>
+	</div>
+	<div id="myModal" class="modal fade" data-backdrop="static"
+		data-keyboard="false" th:if="${showAd} != null and ${showAd}">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div id="timer_div"
+						Style="color: red; font-size: 20px; text-align: center;"></div>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Policy based Image</h4>
+				</div>
+				<div class="modal-body" style="height: 430px;"
+					th:if="${defaultAds} != null" th:each="obj, itr : ${defaultAds}">
+					<img th:src="${obj.adUrl}" id="imagepreview"
+						style="width: 565px; height: 430px;" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+</body>
+</html>

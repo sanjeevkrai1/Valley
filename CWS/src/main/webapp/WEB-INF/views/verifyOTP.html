@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>CWS</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<!-- 	<script th:src="@{/resources/js/wurfl.js}"></script> -->
+<script type="text/javascript" src="//wurfl.io/wurfl.js"></script>
+<script>
+	function validateOtp() {
+		
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i
+				.test(navigator.userAgent)) {
+			document.getElementById('checkMobile').value = "mobile";
+		} else {
+			document.getElementById('checkMobile').value = "desktop";
+		}
+		document.otpForm.submit();
+		// <![CDATA[
+
+		/* if (WURFL.is_mobile === true) {
+		    document.getElementById('checkMobile').value="mobile";
+		}else{
+			 document.getElementById('checkMobile').value="desktop";
+		}  */
+
+		// ]]>
+	}
+</script>
+
+</head>
+<body>
+	<div id="wapper">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		<div id="loginDiv" class="login_content">
+			<form name="otpForm" action="validateOTP" method="post">
+				<div class="login_outer">
+					<div class="form">
+						<div class="form_list">
+							<input type="hidden" id="checkMobile" name="checkMobile" />
+							<ul>
+								<li>
+									<h1 style="padding-right: 20px;">CWS OTP</h1>
+
+								</li>
+								<li><input type="text" placeholder="Enter OTP"
+									name="lastOtp" /></li>
+								<li><input type="hidden" name="macAddress"
+									th:value="${macAddress}" /></li>
+							</ul>
+							<div class='error_strings'>
+								<span th:text="${LoginErrMsg}" style="color: red;"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<a href="#"><input type="button" onclick="validateOtp();"
+						value="Validate" class="button" /></a>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+
+</body>
+</html>

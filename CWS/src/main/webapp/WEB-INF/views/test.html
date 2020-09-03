@@ -1,0 +1,65 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Login</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"
+	type="text/css"></link>
+
+<link rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-theme.min.css}" />
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+<script>
+	
+</script>
+</head>
+<body>
+	<div id="wapper">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		<div id="loginDiv" class="login_content">
+			<form action="update" method="post">
+				<div class="login_outer">
+					<div class="form">
+						<div class="form_list">
+							<ul>
+								<li>
+									<h1 style="padding-right: 20px;">Details</h1>
+
+								</li>
+								<li><input type="text" placeholder="Mob Number"
+									name="Otp" th:value="${otp}" /></li>
+								<li><input type="hidden" name="macAddress"
+									th:value="${macAddress}" /></li>
+							</ul>
+							<div class='error_strings'>
+								<span th:text="${LoginErrMsg}" style="color: red;"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<!-- <a href="#"><input type="submit" value="Validate"
+						class="button" /></a> -->
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Register</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"
+	type="text/css"></link>
+
+<link rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-theme.min.css}" />
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+
+	setTimeout(function() {
+		$('#myModal').modal('hide')
+	}, 20000);
+
+	var seconds_left = 20;
+	var interval = setInterval(
+			function() {
+				document.getElementById('timer_div').innerHTML = --seconds_left
+						+ " Sec Left";
+				// <![CDATA[
+				if (seconds_left <= 2) {
+					document.getElementById('timer_div').innerHTML = "You are Ready to Login or Register!";
+					clearInterval(interval);
+				}
+			}, 1000);
+	// ]]>
+</script>
+<script>
+	
+</script>
+</head>
+<body>
+	<div id="wapper">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+
+		<div id="registerDiv" class="login_content"
+			th:if="${userProfile} == 'Register'">
+			<form action="register" method="post">
+				<div class="login_outer">
+					<div class="form">
+						<div class="form_list">
+							<ul>
+								<li>
+									<h1 style="padding-right: 20px;">CWS Register</h1>
+								</li>
+								<li><input type="text" placeholder="UserName"
+									name="userName" /></li>
+								<li><select style="width: 200px; height: 49px;"
+									name="gender" class="selectpicker">
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+								</select></li>
+								<li><input type="email" placeholder="Email" name="emailId" />
+								</li>
+								<li><input type="number" placeholder="Mob Number"
+									name="mobileNo" /></li>
+								<!-- <li><textarea style="width: 200px;" rows="3" id="address"
+										placeholder="Postal Address"></textarea></li> -->
+								<li><input type="hidden" name="baseGrantUrl"
+									th:value="${baseGrantUrl}" /> <input type="hidden"
+									name="continueUrl" th:value="${continueUrl}" /> <input
+									type="hidden" name="nodeMac" th:value="${nodeMac}" /> <input
+									type="hidden" name="clientIp" th:value="${clientIp}" /> <input
+									type="hidden" name="macAddress" th:value="${macAddress}" /> <input
+									type="hidden" name="accessPoint" th:value="${accessPoint}" />
+									<input type="hidden" name="location" th:value="${location}" /></li>
+
+							</ul>
+							<div class='error_strings'>
+								<span th:text="${LoginErrMsg}" style="color: red;"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<a href="#"><input type="submit" value="Register"
+						class="button" /></a>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="myModal" class="modal fade" data-backdrop="static"
+		data-keyboard="false" th:if="${showAd} == 'on'">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div id="timer_div"
+						Style="color: red; font-size: 20px; text-align: center;"></div>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Policy based Image</h4>
+				</div>
+				<div class="modal-body" style="height: 430px;">
+					<img  th:src="${imgurl}"
+						id="imagepreview" style="width: 565px; height: 430px;" /> <!-- th:src="@{/resources/images/background1.jpg}" -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+</body>
+</html>

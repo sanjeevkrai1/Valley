@@ -1,0 +1,166 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="videoAd">
+	<form name="videoGrantValue" action="grant" method="post">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div id="timer_div"
+						Style="color: red; font-size: 20px; text-align: center;"></div>
+					<h4 class="modal-title" id="myModalLabel">Click Here for
+						Access few more free minutes</h4>
+				</div>
+				<input type="hidden" name="access" th:value="${access}" /> 
+				<input type="hidden" name="apName" th:value="${apName}" /> <input
+					type="hidden" name="clientIp" th:value="${clientIp}" /> <input
+					type="hidden" name="macAddress" th:value="${macAddress}" /> <input
+					type="hidden" name="ssid" th:value="${ssid}" /> <input
+					type="hidden" name="url" th:value="${url}" /> <input type="hidden"
+					name="vcName" th:value="${vcName}" /> <input type="hidden"
+					name="switchIp" th:value="${switchIp}" /> <input type="hidden"
+					name="cmd" th:value="${cmd}" />
+					
+				<input type="hidden" id="grantTime" name="grantTime"
+					th:value="${adBean.videoFreeMinute}" /> <input type="hidden"
+					id="opinion" name="opinion" /> <input type="hidden" id="ratePoint"
+					name="ratePoint" /> <input type="hidden" id="videoAdId" th:value="${adBean.videoAdId}"
+					name="adIds" /> <input type="hidden" id="userId" name="userId"
+					th:value="${userId}" /> <input type="hidden" id="baseGrantUrl"
+					name="baseGrantUrl" th:value="${baseGrantUrl}" />
+					
+					<input type="hidden" name="videoFreeMinute" th:value="${adBean.videoFreeMinute}" />
+				<div class="modal-body" style="height: 100px; float: center;">
+
+					<div th:if="!${adBean.isVideoRating} and ${adBean.isVideoLike}">
+						<input type="button" onclick="videoExtraPack();"
+							class="btn btn-default" value="Click Here" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a class="videolike"
+							id="videoimglike"
+							th:onclick="'videoLike(\''+${adBean.videoAdId}+'\',\''+${adBean.videoLikePoints}+'\');'"><i
+							class="fa fa-thumbs-o-up"></i> <b> <img th:alt="like"
+								th:src="@{/resources/images/like.jpg}"
+								style="height: 25px; width: 25px;" />
+						</b> <label id="videolike" class="videolike"
+							th:text="${adBean.videoLikePoints}" style="font-weight: bold;"></label>
+						</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="videodislike"
+							id="videoimgdislike"
+							th:onclick="'videoDislike(\''+${adBean.videoAdId}+'\',\''+${adBean.videoDislikePoints}+'\');'"><i
+							class="fa fa-thumbs-o-down"></i><b> <img th:alt="dislike"
+								th:src="@{/resources/images/dislike.jpg}"
+								style="height: 25px; width: 25px;" /></b> <label
+							class="videodislike" id="videodislike"
+							th:text="${adBean.videoDislikePoints}" style="font-weight: bold;"></label>
+						</a>
+					</div>
+
+					<div th:if="${adBean.isVideoRating} and !${adBean.isVideoLike}">
+						<input type="button" onclick="videoExtraPack();"
+							class="btn btn-default" value="Click Here" /> <input
+							type="hidden" id="totalRatePoint" name="totalRatePoint"
+							th:value="${adBean.staticTotalRatingCount}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+						<a class="dislike" id="dislike"><i class="fa fa-thumbs-o-up"></i>
+							<input id="videoratePoint" class="videoratePoint"
+							readonly="readonly" type="text"
+							th:value="${adBean.videoRatingPoints} +' ratings'"
+							style="font-weight: bold; width: 150px;" /> </a> 
+							<a class="dislike" id="dislike"><i
+							class="fa fa-thumbs-o-up"></i> <input id="videorateVal"
+							class="rateVal" name="videorateVal" readonly="readonly" type="text"
+							th:value="${adBean.videoRateAvg} +' average'"
+							style="font-weight: bold; width: 100px;" /> </a>
+							<a class="rate"
+							id="vidRate" onclick="showVideoRate();"><i
+							class="fa fa-thumbs-o-up"></i> <input id="rate1" class="rate1"
+							name="rate1" readonly="readonly" type="text" value="Rate Now"
+							style="font-weight: bold; width: 75px;" /> </a>
+					</div>
+
+					<div th:if="${adBean.isVideoRating} and ${adBean.isVideoLike}">
+						<input type="button" onclick="videoExtraPack();"
+							class="btn btn-default" value="Click Here" /> <input
+							type="hidden" id="totalRatePoint" name="totalRatePoint"
+							th:value="${adBean.videoTotalRatingCount}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+						<a class="videolike" id="videoimglike"
+							th:onclick="'videoLike(\''+${adBean.videoAdId}+'\',\''+${adBean.videoLikePoints}+'\');'"><i
+							class="fa fa-thumbs-o-up"></i> <b> <img th:alt="like"
+								th:src="@{/resources/images/like.jpg}"
+								style="height: 25px; width: 25px;" />
+						</b> <label id="videolike" class="videolike"
+							th:text="${adBean.videoLikePoints}" style="font-weight: bold;"></label>
+						</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="videodislike"
+							id="videoimgdislike"
+							th:onclick="'videoDislike(\''+${adBean.videoAdId}+'\',\''+${adBean.videoDislikePoints}+'\');'"><i
+							class="fa fa-thumbs-o-down"></i><b> <img th:alt="dislike"
+								th:src="@{/resources/images/dislike.jpg}"
+								style="height: 25px; width: 25px;" /></b> <label
+							class="videodislike" id="videodislike"
+							th:text="${adBean.videoDislikePoints}" style="font-weight: bold;"></label>
+						</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a class="dislike" id="dislike"><i
+							class="fa fa-thumbs-o-up"></i> <input id="videoratePoint"
+							class="videoratePoint" readonly="readonly" type="text"
+							th:value="${adBean.videoRatingPoints} +' ratings'"
+							style="font-weight: bold; width: 150px;" /> </a>
+							<a class="dislike" id="dislike"><i
+							class="fa fa-thumbs-o-up"></i> <input id="videorateVal"
+							class="rateVal" name="videorateVal" readonly="readonly" type="text"
+							th:value="${adBean.videoRateAvg} +' average'"
+							style="font-weight: bold; width: 100px;" /> </a>
+							
+							 <a class="rate"
+							id="vidRate" onclick="showVideoRate();"><i
+							class="fa fa-thumbs-o-up"></i> <input id="rate1" class="rate1"
+							name="rate1" readonly="readonly" type="text" value="Rate Now"
+							style="font-weight: bold; width: 75px;" /> </a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div th:fragment="videoRate">
+	<form>
+		<!-- name="form1" action="buyPack" method="post" -->
+		<div class="modal-dialog1">
+			<div class="modal-content"
+				style="width: 300px; position: relative; background-color: #fff; margin: 30px auto">
+				<div class="modal-header">
+					<div id="timer_div"
+						Style="color: red; font-size: 20px; text-align: center;"></div>
+					<h4 class="modal-title" id="myModalLabel">Video Rating Point
+						11</h4>
+				</div>
+				<div class="modal-body">
+					<span class="rating1"> <input type="radio"
+						class="rating1-input" id="rating1-input-1-5" value="1"
+						name="rating1-input-1"
+						th:onclick="'sendVideoRate(\''+${adBean.videoAdId}+'\',\''+${adBean.videoRatingPoints}+'\',\''+${adBean.videoTotalRatingCount}+'\', 5);'" />
+						<label for="rating1-input-1-5" class="rating1-star"></label> <input
+						type="radio" class="rating1-input" id="rating1-input-1-4"
+						name="rating1-input-1"
+						th:onclick="'sendVideoRate(\''+${adBean.videoAdId}+'\',\''+${adBean.videoRatingPoints}+'\',\''+${adBean.videoTotalRatingCount}+'\', 4);'" />
+						<label for="rating1-input-1-4" class="rating1-star"></label> <input
+						type="radio" class="rating1-input" id="rating1-input-1-3"
+						name="rating1-input-1"
+						th:onclick="'sendVideoRate(\''+${adBean.videoAdId}+'\',\''+${adBean.videoRatingPoints}+'\',\''+${adBean.videoTotalRatingCount}+'\', 3);'" />
+						<label for="rating1-input-1-3" class="rating1-star"></label> <input
+						type="radio" class="rating1-input" id="rating1-input-1-2"
+						name="rating1-input-1"
+						th:onclick="'sendVideoRate(\''+${adBean.videoAdId}+'\',\''+${adBean.videoRatingPoints}+'\',\''+${adBean.videoTotalRatingCount}+'\', 2);'" />
+						<label for="rating1-input-1-2" class="rating1-star"></label> <input
+						type="radio" class="rating1-input" id="rating1-input-1-1"
+						name="rating1-input-1"
+						th:onclick="'sendVideoRate(\''+${adBean.videoAdId}+'\',\''+${adBean.videoRatingPoints}+'\',\''+${adBean.videoTotalRatingCount}+'\', 1);'" />
+						<label for="rating1-input-1-1" class="rating1-star"></label>
+					</span>
+				</div>
+
+			</div>
+		</div>
+	</form>
+</div>
+
+</html>

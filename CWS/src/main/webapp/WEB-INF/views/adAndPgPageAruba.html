@@ -1,0 +1,242 @@
+<!doctype html>
+<html class="login_html" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>CWS</title>
+
+<link th:href="@{/resources/css/style.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/bootstrap.min.css}" rel="stylesheet"
+	type="text/css"></link>
+<link th:href="@{/resources/css/rating.css}" rel="stylesheet"
+	type="text/css"></link>
+<link rel="stylesheet"
+	th:href="@{/resources/css/bootstrap-theme.min.css}" />
+<script th:src="@{/resources/js/jquery.min.js}"></script>
+<script th:src="@{/resources/js/adAndPg.js}"></script>
+<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+	<div id="wapper"
+		style="background-image: url('../resources/images/background1.jpg'); background-size: 1370px 670px; background-repeat: no-repeat; width: 100%; height: 650px;">
+		<div class="header">
+			<a class="logo" href="#"><img
+				th:src="@{/resources/images/valley_logo.png}" alt="Valley Logo"
+				title="Logo" /></a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+
+		<input type="hidden" id="duration" name="duration"
+			th:value="${duration}" /> <input type="hidden" id="userId"
+			name="userId" th:value="${userId}" />
+		<!-- <input type="text" id="adId" name="adId" /> -->
+
+		<div class="clear"></div>
+
+		<div id="showButtonModal" class="modal fade" data-backdrop="static"
+			data-keyboard="false">
+			<form name="form" action="purchase" method="post">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel">Choose option</h4>
+						</div>
+						<div class="modal-body" style="height: 100px;"
+							th:if="${adBean} != null">
+
+							<input type="hidden" name="apName" th:value="${apName}" /> <input
+								type="hidden" name="clientIp" th:value="${clientIp}" /> <input
+								type="hidden" name="macAddress" th:value="${macAddress}" /> <input
+								type="hidden" name="ssid" th:value="${ssid}" /> <input
+								type="hidden" name="url" th:value="${url}" /> <input
+								type="hidden" name="vcName" th:value="${vcName}" /> <input
+								type="hidden" name="switchIp" th:value="${switchIp}" /> <input
+								type="hidden" name="cmd" th:value="${cmd}" /> <input
+								type="hidden" name="userId" th:value="${userId}" /> <a
+								th:if="${adBean.isStatic} != null and ${adBean.isStatic}"
+								th:onclick="'showAd(\''+${adBean.staticShowTime}+'\');'"><input
+								type="button" class="btn btn-default" value="Static Ad" /></a> <a
+								th:if="${adBean.isVideo} != null and ${adBean.isVideo}"
+								onclick="showVideoAd();"><input type="button"
+								class="btn btn-default" value="Video Ad" /></a> <a
+								th:if="${adBean.isAudio} != null and ${adBean.isAudio}"
+								onclick="showAudioAd();"><input type="button"
+								class="btn btn-default" value="Audio Ad" /></a>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<!-- <a
+							th:href="@{purchase(userId=${userId})}"> -->
+							<input type="submit" class="btn btn-default" value="Buy Option" />
+							<!-- </a> -->
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="staticModal" class="modal fade" data-backdrop="static"
+			data-keyboard="false"
+			th:if="${adBean} !=null and !${adBean.isRedirection}">
+			<form name="form1" action="buyPack" method="post">
+				<div class="modal-dialog1">
+					<div class="modal-content">
+						<div class="modal-header">
+							<div id="timer_div"
+								Style="color: red; font-size: 20px; text-align: center;"></div>
+							<h4 class="modal-title" id="myModalLabel">Policy based Image</h4>
+						</div>
+						<div
+							style="width: 1200px; background-color: white; height: 500px; overflow: auto;">
+
+							<div class="modal-body" th:if="${staticAdsList} != null"
+								th:each="obj, itr : ${staticAdsList}">
+								<img th:src="${obj.staticAdUrl}" id="imagepreview"
+									style="width: 1168px; height: 250px;" />
+							</div>
+						</div>
+						<a th:href="@{purchase(userId=${userId})}"> <input
+							type="button" class="btn btn-default" value="Buy Option" /></a>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="staticModal" class="modal fade" data-backdrop="static"
+			data-keyboard="false"
+			th:if="${adBean} !=null and ${adBean.isRedirection}">
+			<form name="form1" action="buyPack" method="post">
+				<div class="modal-dialog1">
+					<div class="modal-content" th:if="${staticAdsList} != null"
+						th:each="obj, itr : ${staticAdsList}">
+
+						<div class="modal-header">
+							<div id="timer_div"
+								Style="color: red; font-size: 20px; text-align: center;"></div>
+							<h4 class="modal-title" id="myModalLabel">Policy Redirect
+								Image</h4>
+						</div>
+						<button type="button" class="close" data-dismiss="modal"
+							th:onclick="'redirectStaticDislike(\''+${obj.staticAdId}+'\',\''+${obj.staticDislikePoints}+'\');'">
+							<span aria-hidden="false" style="color:red;"><img th:src="@{/resources/images/close.jpg}" style="width: 30px; background-color: white; height: 30px; margin-bottom:-25px;"></img></span><span class="sr-only"></span>
+						</button>
+						<div
+							style="width: 1200px; background-color: white; height: 500px; overflow: auto;">
+
+							<div class="modal-body" th:if="${staticAdsList} != null"
+								th:each="obj, itr : ${staticAdsList}">
+								<img th:src="${obj.staticAdUrl}" id="imagepreview"
+									style="width: 1168px; height: 250px;"
+									th:onclick="'redirectStaticLike(\''+${obj.staticAdId}+'\',\''+${obj.staticLikePoints}+'\',\''+${adBean.redirectionUrl}+'\');'" />
+							</div>
+						</div>
+						<a th:href="@{purchase(userId=${userId})}"> <input
+							type="button" class="btn btn-default" value="Buy Option" /></a>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="videoModal" class="modal fade" data-backdrop="static"
+			data-keyboard="false">
+			<form name="form" action="grant" method="post">
+				<div class="modal-dialog2">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Policy based Video</h4>
+						</div>
+						<div class="modal-body" th:if="${adBean} != null">
+							<video id="myVideo" height="449px">
+								<source th:src="${adBean.videoAdUrl}" type="video/mp4" />
+							</video>
+						</div>
+						<a th:href="@{purchase(userId=${userId})}"> <input
+							type="button" class="btn btn-default" value="Buy Option" /></a>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div id="audioModal" class="modal fade" data-backdrop="static"
+			data-keyboard="false">
+			<form name="form" action="grant" method="post">
+				<div class="modal-dialog">
+					<div class="modal-content"
+						style="height: 180px; margin-left: -6px;">
+						<div class="modal-header">
+							<h4 class="modal-title">Policy based Audio</h4>
+						</div>
+						<div class="modal-body" th:if="${adBean} != null">
+							<audio id="myAudio" preload='none'>
+								<!-- controls="" preload='none' -->
+								<source th:src="${adBean.audioAdUrl}" type="audio/mpeg" />
+							</audio>
+							<a href="#" id="audioControl"><input type="button"
+								class="btn btn-default" value="Play Audio" /></a> <a
+								th:href="@{purchase(userId=${userId})}"> <input
+								type="button" class="btn btn-default" value="Buy Option" /></a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+
+		<!-- <form name="staticGrantValue" action="grant" method="post"> -->
+		<div th:include="include/staticAdDiv :: staticAd" id="staticAdDiv"
+			class="modal fade" data-backdrop="static" data-keyboard="false"></div>
+
+		<div th:include="include/videoAdDiv :: videoAd" id="videoAdDiv"
+			class="modal fade" data-backdrop="static" data-keyboard="false"></div>
+
+		<div th:include="include/audioAdDiv :: audioAd" id="audioAdDiv"
+			class="modal fade" data-backdrop="static" data-keyboard="false"></div>
+
+		<!-- </form> -->
+
+		<div th:include="include/staticAdDiv :: staticRate"
+			id="staticAdRatingDiv" class="modal fade" data-backdrop="static"
+			data-keyboard="false"></div>
+
+		<div th:include="include/videoAdDiv :: videoRate"
+			id="videoAdRatingDiv" class="modal fade" data-backdrop="static"
+			data-keyboard="false"></div>
+
+		<div th:include="include/audioAdDiv :: audioRate"
+			id="audioAdRatingDiv" class="modal fade" data-backdrop="static"
+			data-keyboard="false"></div>
+
+
+		<div id="openAppDiv" class="login_content" style="display: none;">
+			<form>
+				<div class="login_outer">
+					<div class="form">
+						<div class="form_list">
+							<ul>
+								<li>
+									<h1 style="padding-right: 20px;">Open App</h1>
+
+								</li>
+								<li><a th:href="${GrantAccessURL}"><input type="button"
+										value="Click here for Open App" class="button" /></a></li>
+								<li><a th:href="${appUrl}"><input type="button"
+										value="Click here for Download App" class="button" /></a></li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</form>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+	<div class="footer">
+		<span>Copyright All rights reserved by Valley Telegence Pvt.
+			Ltd.</span>
+	</div>
+</body>
+</html>
